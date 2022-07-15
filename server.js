@@ -5,7 +5,6 @@ import apiRoutes from './src/routes/apiRoutes.js'
 import passport from 'passport'
 import './src/passport/local.js'
 import './src/mongooseConnection/mongooseConnection.js'
-import { appendFile } from 'fs'
 
 //creo mi app servidor
 const app = express();
@@ -21,7 +20,7 @@ app.use(session({
     secret:'secretKey',
     saveUninitialized: false,
     resave:false,
-    store: 'mongodb+srv://Mariela:mongo1991@cluster0.ashm8.mongodb.net/sessionMongoD26?retryWrites=true&w=majority',
+    store: MongoStore.create({mongoUrl: 'mongodb+srv://Mariela:mongo1991@cluster0.ashm8.mongodb.net/sessionMongoD26?retryWrites=true&w=majority'}),
     cookie: {maxAge:600000} //expira en 10 mins
 }))
 app.use('/', apiRoutes)
