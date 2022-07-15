@@ -17,7 +17,13 @@ app.set('view engine', 'ejs')
 //middlewares
 app.use(express.json())
 app.use(express.urlencoded({extended:false}))
-
+app.use(session({
+    secret:'secretKey',
+    saveUninitialized: false,
+    resave:false,
+    store: 'mongodb+srv://Mariela:mongo1991@cluster0.ashm8.mongodb.net/sessionMongoD26?retryWrites=true&w=majority',
+    cookie: {maxAge:600000} //expira en 10 mins
+}))
 app.use('/', apiRoutes)
 
 
