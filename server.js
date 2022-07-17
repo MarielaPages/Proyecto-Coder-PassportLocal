@@ -15,16 +15,17 @@ app.set('view engine', 'ejs')
 
 //middlewares
 app.use(express.json())
-app.use(express.urlencoded({extended:false}))
+app.use(express.urlencoded({extended:true}))
 app.use(session({
     secret:'secretKey',
     saveUninitialized: false,
     resave:false,
     store: MongoStore.create({mongoUrl: 'mongodb+srv://Mariela:mongo1991@cluster0.ashm8.mongodb.net/sessionMongoD26?retryWrites=true&w=majority'}),
-    cookie: {maxAge:600000} //expira en 10 mins
+    cookie: {maxAge:600000} //sesion expira en 10 mins (a menos que refresque la pagina del sitio, que seria la de bienvenido)
 }))
+app.use(passport.initialize()) //creo que este es para que funcione passport
+app.use(passport.session())//para que session funcione con passport
 app.use('/', apiRoutes)
-
 
 
 //inicio server
