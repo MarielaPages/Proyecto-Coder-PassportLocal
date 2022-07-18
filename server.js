@@ -1,10 +1,10 @@
 import express from 'express'
 import session from 'express-session'
 import MongoStore from 'connect-mongo'
-import apiRoutes from './src/routes/apiRoutes.js'
 import passport from 'passport'
 import './src/passport/local.js'
 import './src/mongooseConnection/mongooseConnection.js'
+import apiRoutes from './src/routes/apiRoutes.js'
 
 //creo mi app servidor
 const app = express();

@@ -10,7 +10,6 @@ passport.use('registro', new LocalStrategy({
     passwordField: 'password',
     passReqToCallback: true
 }, async(req, email, password, done) => {
-    console.log(email, password)
     const usuarioBD = await Usuarios.findOne({email: email})
     if(usuarioBD){
         return done(null, false); // si ya existe devlve null porque no hubo error, pero false indicando que la rsta no fue satisfactoria. false indica falla en el registro
@@ -24,6 +23,18 @@ passport.use('registro', new LocalStrategy({
 }
 ))
 
+passport.use('login', new LocalStrategy({
+    usernameField: 'email',
+    passwordField: 'password',
+    passReqToCallback: true
+}, async(req, email, password, done) => {
+    const usuarioBD = await Usuarios.findOne({email: email})
+    if(!usuarioBD){
+        return done(null, false)
+    }
+    done(null, usuarioBD)
+}
+))
 
 //creo la serializ y deserializ --> por esto en session se guarda en passport solo user y el id, no se pasa toda la info del usuario que se logueo
 passport.serializeUser((usuario, done) => {
