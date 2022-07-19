@@ -33,6 +33,10 @@ router.post('/login', passport.authenticate('login', { //al hacer esto se guarda
     successRedirect: '/bienvenido'
 }))
 
+router.get('/errorLogin', (req, res) => {
+    res.render('errorLogin')
+})
+
 router.get('/bienvenido', isAuth, (req, res) => {
     res.render('bienvenido', {email: req.user.email})
 })

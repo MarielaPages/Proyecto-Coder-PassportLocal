@@ -1,8 +1,14 @@
 import passport from "passport";
 import { Strategy } from 'passport-local';
 import Usuarios from '../modeloMongoose/modeloMongoose.js'
+import bcrypt from 'bcrypt'
 
 const LocalStrategy = Strategy; //guardo el metodo en esa cte
+
+//creo funcion comprar para la contra encriptada
+const comparar = (password, userEncryptPass) => {
+    return bcrypt.compareSync(password, userEncryptPass)
+}
 
 //Creo mis funciones passport
 passport.use('registro', new LocalStrategy({
@@ -15,9 +21,9 @@ passport.use('registro', new LocalStrategy({
         return done(null, false); // si ya existe devlve null porque no hubo error, pero false indicando que la rsta no fue satisfactoria. false indica falla en el registro
         //pongo return para que frene la ejec de la funcion si ya existia
     }
-    const usuarioNuevo = new Usuarios();
+    const usuarioNuevo = new Usuarios(); //creo nueva instancia del modelo (o sea, un documento) que tendra los metodos que tiene el modelo
     usuarioNuevo.email = email;
-    usuarioNuevo.password = password;
+    usuarioNuevo.password = usuarioNuevo.encriptar(password);
     await usuarioNuevo.save();
     return done(null, usuarioNuevo);
 }
@@ -32,7 +38,10 @@ passport.use('login', new LocalStrategy({
     if(!usuarioBD){
         return done(null, false)
     }
-    done(null, usuarioBD)
+    if(!comparar(password, usuarioBD.password)){
+        return done(null, false)
+    }
+    return done(null, usuarioBD)
 }
 ))
 
